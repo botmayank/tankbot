@@ -23,88 +23,92 @@ import RPi.GPIO as GPIO
 import os
 from time import sleep
 
-class MotorDriver():
-    def __init__(self, motor_pins=MOTOR_PINS):
+class Motor():
+    def __init__(self, motor_pins, motor_type="left"):
         self.motor_pins = motor_pins
-
+        self.motor_type = motor_type
         GPIO.setmode(GPIO.BOARD)
-        print("Setting up motor controller pins...")
         GPIO.setup(self.motor_pins[0], GPIO.OUT)
         GPIO.setup(self.motor_pins[1], GPIO.OUT)
-        GPIO.setup(self.motor_pins[2], GPIO.OUT)
-        GPIO.setup(self.motor_pins[3], GPIO.OUT)
 
     def __del__(self):
         GPIO.cleanup()
 
+    def forward(self):
+        if self.motor_type == "left":
+            GPIO.output(self.motor_pins[0], True)
+            GPIO.output(self.motor_pins[1], False)
+        elif self.motor_type == "right":
+            GPIO.output(self.motor_pins[0], False)
+            GPIO.output(self.motor_pins[1], True)
+
+    def reverse(self):
+        if self.motor_type == "left":
+            GPIO.output(self.motor_pins[0], False)
+            GPIO.output(self.motor_pins[1], True)
+        elif self.motor_type == "right":
+            GPIO.output(self.motor_pins[0], True)
+            GPIO.output(self.motor_pins[1], False)
+
+    def brake(self):        
+        GPIO.output(self.motor_pins[0], False)
+        GPIO.output(self.motor_pins[1], False)
+
+    def hardbrake(self):
+        GPIO.output(self.motor_pins[0], True)
+        GPIO.output(self.motor_pins[1], True)
+
+class MotorDriver():
+    def __init__(self, motor_pins=MOTOR_PINS):
+        self.motor_pins = motor_pins
+        self.left_motor = Motor(motor_pins[2:4], type="left")
+        self.right_motor = Motor(motor_pins[:2], type="right")
+        print("Setting up motor controller pins...")
+
     def turn_left(self):
         print("Turning Left")
-        GPIO.output(self.motor_pins[0], False)
-        GPIO.output(self.motor_pins[1], True)
-        GPIO.output(self.motor_pins[2], False)        
-        GPIO.output(self.motor_pins[3], True)
+        self.left_motor.reverse()
+        self.right_motor.forward()
 
     def turn_1pt_forward_left(self):
         print("Turning 1pt fwd left")
-        GPIO.output(self.motor_pins[0], False)
-        GPIO.output(self.motor_pins[1], True)
-
-        GPIO.output(self.motor_pins[2], False)
-        GPIO.output(self.motor_pins[3], False)
+        self.left_motor.brake()
+        self.right_motor.forward()
 
     def turn_1pt_back_left(self):
         print("Turning 1pt back left")
-        GPIO.output(self.motor_pins[0], True)
-        GPIO.output(self.motor_pins[1], False)
-
-        GPIO.output(self.motor_pins[2], False)
-        GPIO.output(self.motor_pins[3], False)
-
+        self.left_motor.brake()
+        self.right_motor.reverse()
+        
     def turn_right(self):
         print("Turning Right")
-        GPIO.output(self.motor_pins[0], True)
-        GPIO.output(self.motor_pins[1], False)
-        GPIO.output(self.motor_pins[2], True)        
-        GPIO.output(self.motor_pins[3], False)
+        self.left_motor.forward()
+        self.right_motor.reverse()
 
     def turn_1pt_forward_right(self):
         print("Turning 1pt fwd right")
-        GPIO.output(self.motor_pins[0], False)
-        GPIO.output(self.motor_pins[1], False)
-
-        GPIO.output(self.motor_pins[2], True)
-        GPIO.output(self.motor_pins[3], False)
+        self.right_motor.brake()
+        self.left_motor.forward()
 
     def turn_1pt_back_right(self):
         print("Turning 1pt back right")
-        GPIO.output(self.motor_pins[0], False)
-        GPIO.output(self.motor_pins[1], False)
-
-        GPIO.output(self.motor_pins[2], False)
-        GPIO.output(self.motor_pins[3], True)
+        self.right_motor.brake()
+        self.left_motor.reverse()
 
     def go_back(self):
         print("Going back")
-        GPIO.output(self.motor_pins[0], True)
-        GPIO.output(self.motor_pins[1], False)
-        GPIO.output(self.motor_pins[2], False)
-        GPIO.output(self.motor_pins[3], True)
+        self.left_motor.reverse()
+        self.right_motor.reverse()
 
     def go_forward(self):
         print("Going forward")
-        GPIO.output(self.motor_pins[0], False)
-        GPIO.output(self.motor_pins[1], True)
-        GPIO.output(self.motor_pins[2], True)        
-        GPIO.output(self.motor_pins[3], False)
+        self.left_motor.forward()
+        self.right_motor.forward()
 
     def halt(self):
         print("Halting!")
-        GPIO.output(self.motor_pins[0], False)
-        GPIO.output(self.motor_pins[1], False)
-        GPIO.output(self.motor_pins[2], False)        
-        GPIO.output(self.motor_pins[3], False)
-
-
+        self.left_motor.brake()
+        self.right_motor.brake()
 
 def main():
     m = MotorDriver(MOTOR_PINS)
