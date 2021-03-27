@@ -31,9 +31,6 @@ class Motor():
         GPIO.setup(self.motor_pins[0], GPIO.OUT)
         GPIO.setup(self.motor_pins[1], GPIO.OUT)
 
-    def __del__(self):
-        GPIO.cleanup()
-
     def forward(self):
         if self.motor_type == "left":
             GPIO.output(self.motor_pins[0], True)
@@ -61,9 +58,12 @@ class Motor():
 class MotorDriver():
     def __init__(self, motor_pins=MOTOR_PINS):
         self.motor_pins = motor_pins
-        self.left_motor = Motor(motor_pins[2:4], type="left")
-        self.right_motor = Motor(motor_pins[:2], type="right")
+        self.left_motor = Motor(motor_pins[2:4], motor_type="left")
+        self.right_motor = Motor(motor_pins[:2], motor_type="right")
         print("Setting up motor controller pins...")
+
+    def __del__(self):
+        GPIO.cleanup()
 
     def turn_left(self):
         print("Turning Left")
