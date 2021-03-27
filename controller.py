@@ -175,6 +175,9 @@ class Joystick():
         print("Left Joystick ", end="")
         print("X: %f, Y: %f" %(self.axis_states["x"], self.axis_states["y"]))
 
+    def get_left_x_y(self):
+        return (self.axis_states["x"], self.axis_states["y"])
+
 if __name__ == '__main__':
     js = Joystick()
     js.print_available_joysticks()

@@ -24,7 +24,7 @@ import os
 from time import sleep
 
 class MotorDriver():
-    def __init__(self, motor_pins):
+    def __init__(self, motor_pins=MOTOR_PINS):
         self.motor_pins = motor_pins
 
         GPIO.setmode(GPIO.BOARD)
