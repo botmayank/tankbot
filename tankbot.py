@@ -19,14 +19,28 @@ def main():
         while KEEP_DRIVING:
             js.get_event()
             x, y = js.get_left_x_y()
+            x_r, y_r = js.get_right_x_y()
+
+            # Halt if Lstick in center
             if y < EPSILON_FWD and y > -EPSILON_FWD\
                   and x < EPSILON_FWD and x > -EPSILON_FWD:
                 md.halt()
-            # Forward/back
-            if y > EPSILON_FWD:
+
+            # Back/forward
+            if y > EPSILON_FWD: # y is positive when pushed down
                 md.go_back()
+                if x_r > EPSILON_FWD:
+                    md.turn_1pt_back_right()
+                elif x_r < -EPSILON_FWD:
+                    md.turn_1pt_back_left()
+
             elif y < -EPSILON_FWD:
                 md.go_forward()
+                # 1 point Left/Right
+                if x_r > EPSILON_FWD:
+                    md.turn_1pt_forward_right()
+                elif x_r < -EPSILON_FWD:
+                    md.turn_1pt_forward_left()
 
             # Spot Left/Spot Right
             if x > EPSILON_FWD:
@@ -34,13 +48,6 @@ def main():
             elif x < -EPSILON_FWD:
                 md.turn_left()
 
-            x_r, y_r = js.get_right_x_y()
-
-            # 1 point Left/Right
-            if x_r > EPSILON_FWD:
-                md.turn_1pt_right()
-            elif x_r < -EPSILON_FWD:
-                md.turn_1pt_left()
 
     except KeyboardInterrupt as e:
         KEEP_DRIVING = False
