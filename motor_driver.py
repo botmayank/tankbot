@@ -34,6 +34,9 @@ class MotorDriver():
         GPIO.setup(self.motor_pins[2], GPIO.OUT)
         GPIO.setup(self.motor_pins[3], GPIO.OUT)
 
+    def __del__(self):
+        GPIO.cleanup()
+
     def turn_left(self):
         print("Turning Left")
         GPIO.output(self.motor_pins[0], False)
