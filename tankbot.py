@@ -38,7 +38,11 @@ def main():
                 md.go_forward()
                 # 1 point Left/Right
                 if x_r > EPSILON_FWD:
+<<<<<<< HEAD
                     md.turn_1pt_back_left()
+=======
+                    md.turn_1pt_forward_right()
+>>>>>>> ab1d7300045b77ada2c897eb62a5058ff87f8fb8
                 elif x_r < -EPSILON_FWD:
                     md.turn_1pt_forward_left()
 
