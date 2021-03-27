@@ -22,15 +22,25 @@ def main():
             if y < EPSILON_FWD and y > -EPSILON_FWD\
                   and x < EPSILON_FWD and x > -EPSILON_FWD:
                 md.halt()
+            # Forward/back
             if y > EPSILON_FWD:
                 md.go_back()
             elif y < -EPSILON_FWD:
                 md.go_forward()
 
+            # Spot Left/Spot Right
             if x > EPSILON_FWD:
                 md.turn_right()
             elif x < -EPSILON_FWD:
                 md.turn_left()
+
+            x_r, y_r = js.get_right_x_y()
+
+            # 1 point Left/Right
+            if x_r > EPSILON_FWD:
+                md.turn_1pt_right()
+            elif x_r < -EPSILON_FWD:
+                md.turn_1pt_left()
 
     except KeyboardInterrupt as e:
         KEEP_DRIVING = False

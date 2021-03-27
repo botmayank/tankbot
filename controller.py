@@ -181,6 +181,12 @@ class Joystick():
         print("X, Y : ", (x, y))
         return (x, y)
 
+    def get_right_x_y(self):
+        x = self.axis_states["rx"]
+        y = self.axis_states["ry"]
+        print("Right X, Y: ", (x, y))
+        return (x, y)
+
 if __name__ == '__main__':
     js = Joystick()
     js.print_available_joysticks()

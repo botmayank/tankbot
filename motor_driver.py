@@ -44,10 +44,26 @@ class MotorDriver():
         GPIO.output(self.motor_pins[2], False)        
         GPIO.output(self.motor_pins[3], True)
 
+    def turn_1pt_left(self):
+        print("Turning 1pt Left")
+        GPIO.output(self.motor_pins[0], False)
+        GPIO.output(self.motor_pins[1], True)
+
+        GPIO.output(self.motor_pins[2], False)
+        GPIO.output(self.motor_pins[3], False)
+
     def turn_right(self):
         print("Turning Right")
         GPIO.output(self.motor_pins[0], True)
         GPIO.output(self.motor_pins[1], False)
+        GPIO.output(self.motor_pins[2], True)        
+        GPIO.output(self.motor_pins[3], False)
+
+    def turn_1pt_right(self):
+        print("Turning 1pt Right")
+        GPIO.output(self.motor_pins[0], False)
+        GPIO.output(self.motor_pins[1], False)
+
         GPIO.output(self.motor_pins[2], True)        
         GPIO.output(self.motor_pins[3], False)
 
